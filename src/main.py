@@ -3,6 +3,7 @@ from complex import Complex
 from factorial import factorial
 from euler import euler
 from linear_equations import LinearEquations
+from lu import LU
 
 
 def main():
@@ -84,6 +85,23 @@ def main():
     inverse_gauss_result = LinearEquations.matrix_inverse_gauss_method(test_matrix)
 
     Matrix.print(inverse_gauss_result)
+
+    lu_test_matrix = [
+        [-1, 2, -3, 3, 5],
+        [8, 0, 7, 4, -1],
+        [-3, 4, -3, 2, -2],
+        [8, -3, -2, 1, 2],
+        [-2, -1, -6, 9, 0],
+    ]
+
+    lu_test_constant_terms = [[56], [62], [-10], [14], [28]]
+
+    lu_result = LU.solve(lu_test_matrix, lu_test_constant_terms)
+    print()
+    print("LU result: ")
+    print()
+
+    Matrix.print(lu_result)
 
 
 if __name__ == "__main__":

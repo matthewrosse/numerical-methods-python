@@ -72,11 +72,18 @@ def main():
     pivoting_matrix = [[0, 1, 1], [1, 1, 1], [2, 0, -1]]
     pivoting_constant_terms = [[1], [2], [0]]
 
-    result_cw5 = LinearEquations.gauss_elimination_pivoting(
-        pivoting_matrix, pivoting_constant_terms
-    )
+    # result_cw5 = LinearEquations.gauss_elimination_pivoting(
+    #     pivoting_matrix, pivoting_constant_terms
+    # )
 
-    Matrix.print(result_cw5)
+    # Matrix.upper_triangular(pivoting_matrix, pivoting_constant_terms)
+
+    # Matrix.print(result_cw5)
+
+    test_matrix = [[1, 3, 2], [4, -1, 2], [1, -1, 0]]
+    inverse_gauss_result = LinearEquations.matrix_inverse_gauss_method(test_matrix)
+
+    Matrix.print(inverse_gauss_result)
 
 
 if __name__ == "__main__":

@@ -175,6 +175,22 @@ class Matrix:
         return (cloned_matrix, cloned_constant_terms)
 
     @staticmethod
+    def find_biggest_column_idx(matrix, col):
+        biggest_idx = 0
+        for i in range(1, len(matrix)):
+            if matrix[i][col] > matrix[i - 1][col]:
+                biggest_idx = i
+
+        return biggest_idx
+
+    @staticmethod
+    def substitute_rows(matrix, first_row, second_row):
+        for i in range(len(matrix[0])):
+            tmp = matrix[first_row][i]
+            matrix[first_row][i] = matrix[second_row][i]
+            matrix[second_row][i] = tmp
+
+    @staticmethod
     def print(matrix) -> None:
         for row in matrix:
             for col in row:

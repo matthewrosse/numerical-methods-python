@@ -11,10 +11,9 @@ class Matrix:
         cols_b = len(b[0])
 
         if cols_a != rows_b:
-            raise Exception(
-                "Matrices cannot be multiplied, incorrect dimensions.")
+            raise Exception("Matrices cannot be multiplied, incorrect dimensions.")
 
-        result = [[0 for row in range(cols_b)] for col in range(rows_a)]
+        result = [[0 for _ in range(cols_b)] for _ in range(rows_a)]
 
         for i in range(rows_a):
             for j in range(cols_b):
@@ -48,8 +47,7 @@ class Matrix:
         result_rows = len(matrix) - 1
         result_cols = len(matrix[0]) - 1
 
-        result = [[0 for row in range(result_cols)]
-                  for col in range(result_rows)]
+        result = [[0 for _ in range(result_cols)] for _ in range(result_rows)]
 
         for i in range(len(matrix)):
             minor_row = i
@@ -89,22 +87,27 @@ class Matrix:
     @staticmethod
     def inverse(matrix):
         # check if is square matrix
-        result = [[0 for _ in range(len(matrix[0]))]
-                  for _ in range(len(matrix))]
+        result = [[0 for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
 
         root_matrix_det = Matrix.laplace_det(matrix)
         root_matrix_tranposed = Matrix.transpose(matrix)
 
         for i in range(len(result)):
             for j in range(len(result[0])):
-                result[i][j] = (1 / root_matrix_det) * math.pow(-1, i + j) * \
-                    Matrix.laplace_det(
-                        Matrix.create_minor(root_matrix_tranposed, i, j))
+                result[i][j] = (
+                    (1 / root_matrix_det)
+                    * math.pow(-1, i + j)
+                    * Matrix.laplace_det(
+                        Matrix.create_minor(root_matrix_tranposed, i, j)
+                    )
+                )
         return result
 
     @staticmethod
     def transpose(matrix):
-        return [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+        return [
+            [matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))
+        ]
 
     @staticmethod
     def sarrus_det(matrix):
@@ -114,8 +117,62 @@ class Matrix:
         if len(matrix) == 3 and len(matrix[0]) == 3:
             return Matrix.sarrus_det_3x3(matrix)
 
-        raise Exception(
-            "Incorrect dimensions! You need to provide 2x2 or 3x3 matrix.")
+        raise Exception("Incorrect dimensions! You need to provide 2x2 or 3x3 matrix.")
+
+    @staticmethod
+    def clone(matrix):
+        return [
+            [matrix[i][j] for j in range(len(matrix[0]))] for i in range(len(matrix))
+        ]
+
+    @staticmethod
+    def upper_triangular(matrix, constant_terms):
+        cloned_matrix = Matrix.clone(matrix)
+        cloned_constant_terms = Matrix.clone(constant_terms)
+
+        n = len(cloned_matrix)
+
+        multiplier = 0
+
+        for i in range(n):
+            for j in range(n):
+                if j > i:
+                    multiplier = cloned_matrix[j][i] / cloned_matrix[i][i]
+
+                    for k in range(i, n + 1):
+                        if k != n:
+                            cloned_matrix[j][k] = (
+                                cloned_matrix[j][k] - multiplier * cloned_matrix[i][k]
+                            )
+                        else:
+                            cloned_constant_terms[j][0] = (
+                                cloned_constant_terms[j][0]
+                                - multiplier * cloned_constant_terms[i][0]
+                            )
+
+        return (cloned_matrix, cloned_constant_terms)
+
+    @staticmethod
+    def diagonal(matrix, constant_terms):
+        cloned_matrix = Matrix.clone(matrix)
+        cloned_constant_terms = Matrix.clone(constant_terms)
+
+        n = len(cloned_matrix)
+
+        for i in range(n):
+            for j in range(n):
+                if j != i:
+                    tmp = cloned_matrix[j][i] / cloned_matrix[i][i]
+
+                    for k in range(i, n + 1):
+                        if k != n:
+                            cloned_matrix[j][k] -= tmp * cloned_matrix[i][k]
+                        else:
+                            cloned_constant_terms[j][0] -= (
+                                tmp * cloned_constant_terms[i][0]
+                            )
+
+        return (cloned_matrix, cloned_constant_terms)
 
     @staticmethod
     def print(matrix) -> None:

@@ -19,6 +19,7 @@ def main():
 
     matrix_a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     matrix_b = [[2, 3, 4], [5, 7, 8], [9, 2, 3]]
+    matrix_cw2 = [[1, 3, 2], [4, -1, 2], [1, -1, 0]]
 
     matrix_5x5 = [
         [123, 2, 3, 4, 5],
@@ -46,6 +47,12 @@ def main():
     print("Laplace det")
     print()
     print(Matrix.laplace_det(matrix_5x5))
+    print()
+    print()
+    print()
+
+    inversed = Matrix.inverse(matrix_cw2)
+    Matrix.print(inversed)
 
 
 if __name__ == "__main__":

@@ -87,6 +87,26 @@ class Matrix:
         return result
 
     @staticmethod
+    def inverse(matrix):
+        # check if is square matrix
+        result = [[0 for _ in range(len(matrix[0]))]
+                  for _ in range(len(matrix))]
+
+        root_matrix_det = Matrix.laplace_det(matrix)
+        root_matrix_tranposed = Matrix.transpose(matrix)
+
+        for i in range(len(result)):
+            for j in range(len(result[0])):
+                result[i][j] = (1 / root_matrix_det) * math.pow(-1, i + j) * \
+                    Matrix.laplace_det(
+                        Matrix.create_minor(root_matrix_tranposed, i, j))
+        return result
+
+    @staticmethod
+    def transpose(matrix):
+        return [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+
+    @staticmethod
     def sarrus_det(matrix):
         if len(matrix) == 2 and len(matrix[0]) == 2:
             return Matrix.sarrus_det_2x2(matrix)

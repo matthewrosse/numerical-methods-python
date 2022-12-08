@@ -11,12 +11,12 @@ class Complex:
 
     def __str__(self) -> str:
         if self.im < 0:
-            return f"{self.re:.2f}{self.im:.2f}i"
+            return f"{self.re:.8f}{self.im:.8f}i"
 
         if self.im == 0:
             return str(self.re)
 
-        return f"{self.re:.2f}+{self.im:.2f}i"
+        return f"{self.re:.8f}+{self.im:.8f}i"
 
     @staticmethod
     def add(first, second):

@@ -41,3 +41,32 @@ class LU:
         result = LinearEquations.gauss_elimination_pivoting(U, y)
 
         return result
+
+    @staticmethod
+    def inverse_matrix(matrix):
+        L, U = LU.get_LU(matrix)
+        result = [[0 for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
+
+        for i in range(len(matrix[0])):
+            e = [[0 for _ in range(1)] for _ in range(len(matrix))]
+            for j in range(len(matrix)):
+                e[j][0] = 0
+
+            e[i][0] = 1
+
+            X = LinearEquations.gauss_elimination_pivoting(L, e)
+            Y = LinearEquations.gauss_elimination_pivoting(U, X)
+
+            for j in range(len(matrix[0])):
+                result[j][i] = Y[j][0]
+
+        return result
+
+    @staticmethod
+    def det(matrix):
+        L, U = LU.get_LU(matrix)
+
+        L_det = Matrix.laplace_det(L)
+        U_det = Matrix.laplace_det(U)
+
+        return L_det * U_det

@@ -1,5 +1,4 @@
 from matrix import Matrix
-import math
 
 
 class LinearEquations:
@@ -17,7 +16,6 @@ class LinearEquations:
         ]
         matrix_determinant = Matrix.laplace_det(matrix)
         for k in range(len(matrix[0])):
-            # result[k][0] =
             result[k][0] = (
                 Matrix.laplace_det(
                     LinearEquations.substitute_matrix_col(matrix, constant_terms, k)
@@ -92,12 +90,6 @@ class LinearEquations:
                     else:
                         constant_terms_copy[j][0] -= tmp * constant_terms_copy[i][0]
 
-        print("test")
-        Matrix.print(matrix_copy)
-        print()
-        Matrix.print(constant_terms_copy)
-        print()
-
         for i in range(len(matrix_copy) - 1, -1, -1):
             tmp = 0
 
@@ -129,7 +121,6 @@ class LinearEquations:
         rows = len(matrix)
         cols = len(matrix[0])
 
-        # exception when rows != cols
         if rows != cols:
             raise Exception("Wrong matrix dimensions.")
 

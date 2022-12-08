@@ -23,12 +23,24 @@ class Matrix:
         return result
 
     @staticmethod
+    def is_square_matrix(matrix) -> bool:
+        if len(matrix) == len(matrix[0]):
+            return True
+
+        return False
+
+    @staticmethod
     def sarrus_det_2x2(matrix):
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
     @staticmethod
     def sarrus_det_3x3(matrix):
-        # need to check dimensions and throw error
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
         first = (
             matrix[0][0] * matrix[1][1] * matrix[2][2]
             + matrix[1][0] * matrix[2][1] * matrix[0][2]
@@ -41,6 +53,19 @@ class Matrix:
         )
 
         return first - second
+
+    @staticmethod
+    def sarrus_det(matrix):
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
+        if len(matrix) == 2 and len(matrix[0]) == 2:
+            return Matrix.sarrus_det_2x2(matrix)
+
+        if len(matrix) == 3 and len(matrix[0]) == 3:
+            return Matrix.sarrus_det_3x3(matrix)
+
+        raise Exception("Incorrect dimensions! You need to provide 2x2 or 3x3 matrix.")
 
     @staticmethod
     def create_minor(matrix, row, col):
@@ -86,7 +111,9 @@ class Matrix:
 
     @staticmethod
     def inverse(matrix):
-        # check if is square matrix
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
         result = [[0 for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
 
         root_matrix_det = Matrix.laplace_det(matrix)
@@ -110,16 +137,6 @@ class Matrix:
         ]
 
     @staticmethod
-    def sarrus_det(matrix):
-        if len(matrix) == 2 and len(matrix[0]) == 2:
-            return Matrix.sarrus_det_2x2(matrix)
-
-        if len(matrix) == 3 and len(matrix[0]) == 3:
-            return Matrix.sarrus_det_3x3(matrix)
-
-        raise Exception("Incorrect dimensions! You need to provide 2x2 or 3x3 matrix.")
-
-    @staticmethod
     def clone(matrix):
         return [
             [matrix[i][j] for j in range(len(matrix[0]))] for i in range(len(matrix))
@@ -127,6 +144,9 @@ class Matrix:
 
     @staticmethod
     def upper_triangular(matrix, constant_terms):
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
         cloned_matrix = Matrix.clone(matrix)
         cloned_constant_terms = Matrix.clone(constant_terms)
 
@@ -154,6 +174,9 @@ class Matrix:
 
     @staticmethod
     def diagonal(matrix, constant_terms):
+        if not Matrix.is_square_matrix(matrix):
+            raise Exception("Matrix must be square matrix to perform this operation.")
+
         cloned_matrix = Matrix.clone(matrix)
         cloned_constant_terms = Matrix.clone(constant_terms)
 
@@ -191,8 +214,8 @@ class Matrix:
             matrix[second_row][i] = tmp
 
     @staticmethod
-    def print(matrix) -> None:
+    def print(matrix, decimal_places=2) -> None:
         for row in matrix:
             for col in row:
-                print(f"{col:.2f}", end="\t")
+                print(f"{col:.{decimal_places}f}", end="\t")
             print()

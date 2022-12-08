@@ -382,12 +382,95 @@ class TestsRunner:
     def derivatives_tests(self) -> None:
         print("Derivatives tests:")
         print()
-        self.first_derivative_test()
+        self.first_derivative_test_A()
+        self.first_derivative_test_B()
+        self.first_derivative_test_C()
+        self.second_derivative_test_A()
+        self.second_derivative_test_A2()
+        self.second_derivative_test_B()
+        self.second_derivative_test_B2()
 
-    def first_derivative_test(self) -> None:
-        print("1.")
+    def first_derivative_test_A(self) -> None:
+        print("1. First derivative two point ordinary")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        print(f"Result for x = 0: {Derivative.differentiate(function, 0)}")
+        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+            print(
+                f"Result for x = 0, h = {h}: {Derivative.two_point_ordinary(function, 0, h)}"
+            )
+            print(
+                f"Result for x = 1, h = {h}: {Derivative.two_point_ordinary(function, 1, h)}"
+            )
+            print()
+
+    def first_derivative_test_B(self) -> None:
+        print("2. First derivative two point central")
         print()
-        print(f"Result for x = 1: {Derivative.differentiate(function , 1)}")
+        function = lambda x: x * math.sin(x**2) + 1
+        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+            print(
+                f"Result for x = 0, h = {h}: {Derivative.two_point_central(function, 0, h)}"
+            )
+            print(
+                f"Result for x = 1, h = {h}: {Derivative.two_point_central(function, 1, h)}"
+            )
+            print()
+
+    def first_derivative_test_C(self) -> None:
+        print("3. First derivative three point central")
+        print()
+        function = lambda x: x * math.sin(x**2) + 1
+        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+            print(
+                f"Result for x = 0, h = {h}: {Derivative.three_point_central(function, 0, h)}"
+            )
+            print(
+                f"Result for x = 1, h = {h}: {Derivative.three_point_central(function, 1, h)}"
+            )
+            print()
+
+    def second_derivative_test_A(self) -> None:
+        print("4. Second derivative three point ordinary")
+        print()
+        function = lambda x: x * math.sin(x**2) + 1
+        for h in [1e-1, 1e-3, 1e-6, 1e-9, 1e-12]:
+            print(
+                f"Result for x = 0.75, h = {h}: {Derivative.second_three_point_ordinary(function, 0.75, h)}"
+            )
+            print()
+
+    def second_derivative_test_A2(self) -> None:
+        print("4.2. Second derivative three point central")
+        print()
+        function = lambda x: x * math.sin(x**2) + 1
+        for h in [1e-1, 1e-3, 1e-6, 1e-9, 1e-12]:
+            print(
+                f"Result for x = 0.75, h = {h}: {Derivative.second_three_point_central(function, 0.75, h)}"
+            )
+            print()
+
+    def second_derivative_test_B(self) -> None:
+        print("5. Second derivative three point ordinary")
+        print()
+        function = lambda x: math.e**x
+        for h in [1e-1, 1e-5, 1e-7]:
+            print(
+                f"Result for x = 0, h = {h}: {Derivative.second_three_point_ordinary(function, 0, h)}"
+            )
+            print()
+            print(
+                f"Result for x = 1, h = {h}: {Derivative.second_three_point_ordinary(function, 1, h)}"
+            )
+
+    def second_derivative_test_B2(self) -> None:
+        print("5.2. Second derivative three point central")
+        print()
+        function = lambda x: math.e**x
+        for h in [1e-1, 1e-5, 1e-7]:
+            print(
+                f"Result for x = 0, h = {h}: {Derivative.second_three_point_central(function, 0, h)}"
+            )
+            print()
+            print(
+                f"Result for x = 1, h = {h}: {Derivative.second_three_point_central(function, 1, h)}"
+            )

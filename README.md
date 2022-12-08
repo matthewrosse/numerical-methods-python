@@ -1,4 +1,4 @@
-# numerical-methods-python
+# Numerical methods in python.
 
 How to run?
 

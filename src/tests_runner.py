@@ -2,6 +2,7 @@ from complex import Complex
 from factorial import factorial
 from euler import euler
 from matrix import Matrix
+from integral import Integral
 from linear_equations import LinearEquations
 from lu import LU
 import math
@@ -20,6 +21,7 @@ class TestsRunner:
             self.lu_decomposition_tests,
             self.interpolation_tests,
             self.derivatives_tests,
+            self.integrals_tests,
         ]
 
     def run_all(self) -> None:
@@ -474,3 +476,28 @@ class TestsRunner:
             print(
                 f"Result for x = 1, h = {h}: {Derivative.second_three_point_central(function, 1, h)}"
             )
+
+    def stochastic_integral_test(self):
+        func1 = lambda x: (4 * x**3) + (5 * x**2) + 1
+        func2 = lambda x: math.cos(x) + math.e**x + math.tan(x)
+
+        samplesArr = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+        a1 = -1
+        b1 = 1
+        a2 = 0
+        b2 = 1
+
+        for sample in samplesArr:
+            print(
+                f"Function 1, n: {sample} = {Integral.stochastic(func1, a1, b1, sample)}"
+            )
+
+        print()
+
+        for sample in samplesArr:
+            print(
+                f"Function 2, n: {sample} = {Integral.stochastic(func2, a2, b2, sample)}"
+            )
+
+    def integrals_tests(self) -> None:
+        self.stochastic_integral_test()

@@ -1,3 +1,4 @@
+from typing import Callable, List
 from complex import Complex
 from factorial import factorial
 from euler import euler
@@ -8,6 +9,7 @@ from lu import LU
 import math
 from interpolation import Interpolation
 from derivative import Derivative
+import time
 
 
 class TestsRunner:
@@ -396,7 +398,7 @@ class TestsRunner:
         print("1. First derivative two point ordinary")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0, h = {h}: {Derivative.two_point_ordinary(function, 0, h)}"
             )
@@ -409,7 +411,7 @@ class TestsRunner:
         print("2. First derivative two point central")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0, h = {h}: {Derivative.two_point_central(function, 0, h)}"
             )
@@ -422,7 +424,7 @@ class TestsRunner:
         print("3. First derivative three point central")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        for h in [1e-3, 1e-6, 1e-9, 1e-12]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0, h = {h}: {Derivative.three_point_central(function, 0, h)}"
             )
@@ -435,7 +437,7 @@ class TestsRunner:
         print("4. Second derivative three point ordinary")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        for h in [1e-1, 1e-3, 1e-6, 1e-9, 1e-12]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0.75, h = {h}: {Derivative.second_three_point_ordinary(function, 0.75, h)}"
             )
@@ -445,7 +447,7 @@ class TestsRunner:
         print("4.2. Second derivative three point central")
         print()
         function = lambda x: x * math.sin(x**2) + 1
-        for h in [1e-1, 1e-3, 1e-6, 1e-9, 1e-12]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0.75, h = {h}: {Derivative.second_three_point_central(function, 0.75, h)}"
             )
@@ -455,7 +457,7 @@ class TestsRunner:
         print("5. Second derivative three point ordinary")
         print()
         function = lambda x: math.e**x
-        for h in [1e-1, 1e-5, 1e-7]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0, h = {h}: {Derivative.second_three_point_ordinary(function, 0, h)}"
             )
@@ -468,7 +470,7 @@ class TestsRunner:
         print("5.2. Second derivative three point central")
         print()
         function = lambda x: math.e**x
-        for h in [1e-1, 1e-5, 1e-7]:
+        for h in [1e-1, 1e-3, 1e-6]:
             print(
                 f"Result for x = 0, h = {h}: {Derivative.second_three_point_central(function, 0, h)}"
             )
@@ -478,26 +480,229 @@ class TestsRunner:
             )
 
     def stochastic_integral_test(self):
+        print("Calkowanie stochastyczne: ")
         func1 = lambda x: (4 * x**3) + (5 * x**2) + 1
         func2 = lambda x: math.cos(x) + math.e**x + math.tan(x)
 
-        samplesArr = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+        samplesArr = [1, 10, 100, 1000, 10000, 100000, 1000000]
         a1 = -1
         b1 = 1
         a2 = 0
         b2 = 1
 
         for sample in samplesArr:
+            start = time.time()
+            result = Integral.stochastic(func1, a1, b1, sample)
+            end = time.time()
             print(
-                f"Function 1, n: {sample} = {Integral.stochastic(func1, a1, b1, sample)}"
+                f"Function 1, n: {sample}, time elapsed: {end - start} seconds = {result}"
             )
 
         print()
 
         for sample in samplesArr:
+            start = time.time()
+            result = Integral.stochastic(func2, a2, b2, sample)
+            end = time.time()
             print(
-                f"Function 2, n: {sample} = {Integral.stochastic(func2, a2, b2, sample)}"
+                f"Function 2, n: {sample}, time elapsed: {end - start} seconds, result = {result}"
             )
 
     def integrals_tests(self) -> None:
         self.stochastic_integral_test()
+        self.simpson_method_test()
+        self.trapezoid_method_test()
+        self.cw2()
+        self.cw3()
+        self.cw4()
+        self.cw5()
+        self.cw7()
+
+    def simpson_method_test(self) -> None:
+        print()
+        func: Callable = lambda x: 4 * x**3 + 5 * x**2 + 1
+
+        for n in [1, 10, 100, 1000, 10000, 100000, 1000000]:
+            start = time.time()
+            result = Integral.simpson_method(func, -1, 1, n)
+            end = time.time()
+            print(
+                f"Simpson (n = {n}), elapsed time: {end - start} second, result = {result}"
+            )
+        print()
+
+    def trapezoid_method_test(self) -> None:
+        print()
+        func: Callable = lambda x: 4 * x**3 + 5 * x**2 + 1
+        for n in [1, 10, 100, 1000, 10000, 100000, 1000000]:
+            start = time.time()
+            result = Integral.trapezoid_method(func, -1, 1, n)
+            end = time.time()
+            print(
+                f"Trapezoid (n = {n}), elapsed time: {end - start} seconds, result = {result}"
+            )
+        print()
+
+    def cw2(self) -> None:
+        print()
+        print("Cwiczenie 2")
+        print()
+
+        func: Callable = lambda x: (2 / math.sqrt(math.pi)) * math.pow(
+            math.e, -(x**2)
+        )
+        a = 0
+        b = 1
+
+        functions: List[Callable] = [
+            Integral.rectangle_method,
+            Integral.trapezoid_method,
+            Integral.simpson_method,
+            Integral.stochastic,
+        ]
+
+        exact_result: float = 0.84270079294971486934122063508
+
+        for samples_count in [100, 1000, 10000, 100000]:
+            for function in functions:
+                start = time.time()
+                result = function(func, a, b, samples_count)
+                end = time.time()
+
+                print(
+                    f"Function: {function.__name__}, N={samples_count} took {end - start} seconds. Result = {result}, ERR={exact_result - result}"
+                )
+
+    def cw3(self) -> None:
+        print()
+        print("Cwiczenie 3")
+        print()
+
+        func: Callable = lambda x: math.cos(x) + math.pow(math.e, x) + math.tan(x)
+        a = 0
+        b = 1
+
+        functions: List[Callable] = [
+            Integral.rectangle_method,
+            Integral.trapezoid_method,
+            Integral.simpson_method,
+            Integral.stochastic,
+        ]
+
+        exact_result: float = 3.17537928365295618605
+
+        for samples_count in [100, 1000, 10000, 100000]:
+            for function in functions:
+                start = time.time()
+                result = function(func, a, b, samples_count)
+                end = time.time()
+
+                print(
+                    f"Function: {function.__name__}, N={samples_count} took {end - start} seconds. Result = {result}, ERR={exact_result - result}"
+                )
+
+    def cw4(self) -> None:
+        scales_n2: List[float] = [1.0, 1.0]
+        nodes_n2: List[float] = [-0.577350269, 0.577350269]
+        scales_n3: List[float] = [5.0 / 9.0, 8.0 / 9.0, 5.0 / 9.0]
+        nodes_n3: List[float] = [-0.774596669, 0.0, 0.774596669]
+        scales_n4: List[float] = [0.347854845, 0.652145155, 0.652145155, 0.347854845]
+        nodes_n4: List[float] = [-0.861136312, -0.339981044, 0.339981044, 0.861135312]
+
+        print()
+        print("Cw 4")
+        print()
+
+        func_cw1: Callable = lambda x: 4 * x**3 + 5 * x**2 + 1
+        a_arr = [-1, 0]
+        b_arr = [1, 1]
+        func_cw3: Callable = lambda x: math.cos(x) + math.e**x + math.tan(x)
+
+        functions: List[Callable] = [func_cw1, func_cw3]
+
+        print("N=2")
+
+        for f in range(2):
+            start = time.time()
+            result = Integral.gauss_quadrature(
+                functions[f], a_arr[f], b_arr[f], 2, scales_n2, nodes_n2
+            )
+            end = time.time()
+
+            print(f"Function {f} took {end-start}s, result = {result}")
+            print(f"a={a_arr[f]}, b={b_arr[f]}")
+
+        print("N=3")
+
+        for f in range(2):
+            start = time.time()
+            result = Integral.gauss_quadrature(
+                functions[f], a_arr[f], b_arr[f], 3, scales_n3, nodes_n3
+            )
+            end = time.time()
+
+            print(f"Function {f} took {end-start}s, result = {result}")
+
+        print("N=4")
+
+        for f in range(2):
+            start = time.time()
+            result = Integral.gauss_quadrature(
+                functions[f], a_arr[f], b_arr[f], 4, scales_n4, nodes_n4
+            )
+            end = time.time()
+
+            print(f"Function {f} took {end-start}s, result = {result}")
+
+    def cw5(self) -> None:
+        print()
+        print("Complex quadrature")
+        print()
+
+        scales_n2: List[float] = [1.0, 1.0]
+        nodes_n2: List[float] = [-0.577350269, 0.577350269]
+
+        func_cw1: Callable = lambda x: 4 * x**3 + 5 * x**2 + 1
+        a_arr = [-1, 0]
+        b_arr = [1, 1]
+        func_cw3: Callable = lambda x: math.cos(x) + math.e**x + math.tan(x)
+
+        functions: List[Callable] = [func_cw1, func_cw3]
+
+        for i in range(2):
+            start = time.time()
+            result = Integral.complex_quadrature(
+                functions[i], a_arr[i], b_arr[i], 2, 5, scales_n2, nodes_n2
+            )
+            end = time.time()
+
+            print(f"Function {i} took {end-start}s, result = {result}")
+
+    def cw7(self) -> None:
+        print()
+        print("CW7")
+        print()
+        correct = 149.2742360197346071383
+        func: Callable = lambda t: 5 * math.sin(t) * math.sin(t)
+
+        rectangle_samples = 5000
+        rectangle_result = Integral.rectangle_method(func, 0, 60, rectangle_samples)
+        rectangle_err = abs(rectangle_result - correct)
+
+        trapezoid_samples = 1000
+        trapezoid_result = Integral.trapezoid_method(func, 0, 60, trapezoid_samples)
+        trapezoid_err = abs(trapezoid_result - correct)
+
+        simpson_samples = 200
+        simpson_result = Integral.simpson_method(func, 0, 60, simpson_samples)
+        simpson_err = abs(simpson_result - correct)
+
+        print(
+            f"Metoda prostokatow, {rectangle_samples} probek, wynik={rectangle_result}, err={rectangle_err}"
+        )
+        print(
+            f"Metoda trapezow, {trapezoid_samples} probek, wynik={trapezoid_result}, err={trapezoid_err}"
+        )
+        print(
+            f"Metoda simpsona, {simpson_samples} probek, wynik={simpson_result}, err={simpson_err}"
+        )
